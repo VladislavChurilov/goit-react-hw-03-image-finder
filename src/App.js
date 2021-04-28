@@ -22,6 +22,12 @@ componentDidUpdate(prevProps, prevState) {
   if(prevState.searchQuery !== this.state.searchQuery) {
     this.fetchPictures();
   }
+  if (prevState.currentPage > 1 && prevState.currentPage !== this.state.currentPage ) {
+    window.scrollTo({
+    top: document.documentElement.scrollHeight,
+    behavior: 'smooth',
+    });
+  }  
 }
 onChangeQuery = query =>{
   this.setState({
@@ -35,8 +41,8 @@ onChangeQuery = query =>{
 fetchPictures = () => {
   const { currentPage, searchQuery } = this.state;
   const options = { searchQuery,currentPage };
-  this.setState({isLoading: true });
-
+  this.setState({isLoading: true });  
+  
   Api(options)  
   .then(gallery => {
     this.setState(prevState => ({
@@ -61,7 +67,7 @@ getBigImage = (largeImage) => {
 render(){
   const { gallery, isLoading, showModal, largeImage, error } = this.state;
   const shouldRenderLoadMoreButton = gallery.length > 0 && !isLoading;  
-
+  
   return (
   <Conteiner>
     {error && <h1>{error}</h1>}
